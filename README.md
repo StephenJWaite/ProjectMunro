@@ -4,6 +4,8 @@ Its a munro style project
 We dont even know how to use git, life is pain
 
 ---------------------------------------------
+To compile and run (requires 2014 C++ Standard for unique_pointers):
+	g++ -std=c++14 main.cpp -o run && ./run
 The aim of this project is to create a C++ imlpementation
 of a password manager. The user should be able to create new
 entries with a username and password. The program encrypts 
