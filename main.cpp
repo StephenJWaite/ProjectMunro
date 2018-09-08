@@ -5,6 +5,7 @@
 #include <ctime>
 #include <memory>
 #include "picosha2.h"
+#include "cryptopp/config.h"
 
 void hash_password(const char* salt, const char* password, std::string& output);
 void generate_salt(char* salt);
