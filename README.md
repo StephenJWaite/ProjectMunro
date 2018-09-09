@@ -3,11 +3,17 @@ Its a munro style project
 
 We dont even know how to use git, life is pain
 
-## Compile
-To compile and run (requires 2014 C++ Standard for unique_pointers):
+## Setup
+
+### Install libaries:
 
 ```
-	g++ -std=c++14 main.cpp -o run && ./run
+	sudo apt install libcrypto++-dev libcrypto++-doc libcrypto++-utils
+```
+### Compile
+
+```
+	g++ -std=c++14 main.cpp -o run -l:libcryptopp.a && ./run
 ```
 
 The aim of this project is to create a C++ imlpementation

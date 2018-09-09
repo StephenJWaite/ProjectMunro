@@ -86,17 +86,20 @@ int main(int argc, char* argv[]) {
 
     String salt_alt; // Create
     String tmp = salt_alt; // Copy
-    
-    std::cout << "argc: " << argc << std::endl;
-    std::cout << "argv[0]: " << argv[0] << std::endl;
-    std::cout << "argv[1]: " << argv[1] << std::endl;
+       
 
-    std::cout << "Passphrase: ";
-    std::cin.getline(pass_phrase, MAX_PHRASE_LENGTH);
-
-    if (argc != 2) {
-        std::cout << "Incorrect usage: single filename required" << std::endl;
-        return -1;
+    if (argc == 1) {
+        std::cout << "No database file provided. Creating new password database." << std::endl;
+        std::cout << "Please enter a master password to encrypt your password database: ";
+        std::cin.getline(pass_phrase, MAX_PHRASE_LENGTH);
+    }
+    else if (argc == 2) {
+        std::cout << "Database file found. Please enter your password: ";
+        std::cin.getline(pass_phrase, MAX_PHRASE_LENGTH);
+    }
+    else {
+        std::cout << "Incorrect usage. Aborting" << std::endl;
+        exit(1);
     }
 
     //encrypt_file(argv[1], argv[1], pass_phrase);
