@@ -13,7 +13,7 @@ We dont even know how to use git, life is pain
 ### Compile
 
 ```
-	g++ -std=c++14 main.cpp -o run -l:libcryptopp.a && ./run
+	g++ main.cpp -o run -l:libcryptopp.a && ./run
 ```
 
 The aim of this project is to create a C++ imlpementation

@@ -6,12 +6,10 @@
 #include <memory>
 
 #include "picosha2.h" // contains simple SHA-256 hashing function
-//#include "cryptopp/dll.h" 
-#include "cryptopp/default.h" 
+#include "cryptopp/default.h"
 
 void hash_password(const char* salt, const char* password, std::string& output);
 void generate_salt(char* salt);
-void unique_pointers();
 void encrypt_file (const char* in_file, const char* out_file, const char* pass_phrase);
 
 const int SALT_LENGTH = 8;
@@ -84,6 +82,10 @@ int main(int argc, char* argv[]) {
     char salt [SALT_LENGTH] = "invalid";
     std::string hex_hashed_salt_pw;
 
+    CryptoPP::byte hello;
+
+    //CryptoPP::AES::Encryption decryptor;
+
     String salt_alt; // Create
     String tmp = salt_alt; // Copy
        
@@ -107,8 +109,6 @@ int main(int argc, char* argv[]) {
     generate_salt(salt);
     
     hash_password(salt, pass_phrase, hex_hashed_salt_pw);
-
-    unique_pointers();
 
 } // Here the strings go out of scope and so are destroyed
 
@@ -138,27 +138,3 @@ void generate_salt(char* salt) {
 
 // Unique pointers are for when you want a pointer to only
 // last for this scope
-
-void unique_pointers() {
-        // Create new scope:
-    std::cout << "Unique pointers: " << std::endl;
-    {           // Allocate memory on the heap with new
-        std::unique_ptr<String> my_string_uniq_ptr(new String("woohoo"));
-        // alternative way to call it, c++14:
-        std::unique_ptr<String> my_string_uniq_ptr2 = std::make_unique<String>("woohoo");
-        my_string_uniq_ptr->Print(); // Access class functions with ->
-        my_string_uniq_ptr2->Print();
-        
-    }
-
-    std::cout << "Unique pointers: " << std::endl;
-
-    String test = "whippee";
-    String* p = &test;
-    p->Print();
-}
-
-void encrypt_file (const char* in_file, const char* out_file, const char* pass_phrase) {
-    
-    
-}
