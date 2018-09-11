@@ -1,1 +1,1 @@
-g++ main.cpp -o run -l:libcryptopp.a && ./run
+g++ main.cpp -o run && ./run
