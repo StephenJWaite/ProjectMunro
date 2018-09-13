@@ -10,7 +10,6 @@
 
 void hash_password(const char* salt, const char* password, std::string& output);
 void generate_salt(char* salt);
-void encrypt_file (const char* in_file, const char* out_file, const char* pass_phrase);
 
 const int SALT_LENGTH = 8;
 const int MAX_PHRASE_LENGTH=250;
@@ -82,14 +81,9 @@ int main(int argc, char* argv[]) {
     char salt [SALT_LENGTH] = "invalid";
     std::string hex_hashed_salt_pw;
 
-    CryptoPP::byte hello;
-
-    //CryptoPP::AES::Encryption decryptor;
-
     String salt_alt; // Create
     String tmp = salt_alt; // Copy
        
-
     if (argc == 1) {
         std::cout << "No database file provided. Creating new password database." << std::endl;
         std::cout << "Please enter a master password to encrypt your password database: ";
@@ -103,8 +97,6 @@ int main(int argc, char* argv[]) {
         std::cout << "Incorrect usage. Aborting" << std::endl;
         exit(1);
     }
-
-    //encrypt_file(argv[1], argv[1], pass_phrase);
     
     generate_salt(salt);
     
@@ -135,6 +127,3 @@ void generate_salt(char* salt) {
         sprintf(salt + i, "%x", rand() % 16);
     }
 }
-
-// Unique pointers are for when you want a pointer to only
-// last for this scope
