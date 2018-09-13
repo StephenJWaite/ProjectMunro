@@ -76,7 +76,7 @@ std::ostream& operator<<(std::ostream& stream, const String& string) {
 // char* argv: argv is a pointer to the first character of a string array
 // char argv[]: argv is an array of characters 
 int main(int argc, char* argv[]) {
-    //const char password[] = "mypassword";
+    
     char pass_phrase [MAX_PHRASE_LENGTH];
     char salt [SALT_LENGTH] = "invalid";
     std::string hex_hashed_salt_pw;
