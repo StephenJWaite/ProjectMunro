@@ -7,6 +7,7 @@
 
 #include "picosha2.h" // contains simple SHA-256 hashing function
 #include "cryptopp/default.h"
+#include "cryptopp/integer.h"
 
 void hash_password(const char* salt, const char* password, std::string& output);
 void generate_salt(char* salt);
@@ -83,6 +84,10 @@ int main(int argc, char* argv[]) {
 
     String salt_alt; // Create
     String tmp = salt_alt; // Copy
+
+    
+    CryptoPP::Integer i;
+
        
     if (argc == 1) {
         std::cout << "No database file provided. Creating new password database." << std::endl;
