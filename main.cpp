@@ -5,36 +5,59 @@
 #include <ctime>
 #include <memory>
 
-#include "cryptopp/default.h"
-#include "cryptopp/integer.h"
+//#include "cryptopp/default.h"
+//#include "cryptopp/integer.h"
 
-void hash_password(const char* salt, const char* password, std::string& output);
-void generate_salt(char* salt);
-
-const int SALT_LENGTH = 8;
 const int MAX_PHRASE_LENGTH=250;
 
-// char* argv[]: argv is an array of char pointers.
-// char* argv: argv is a pointer to the first character of a string array
-// char argv[]: argv is an array of characters 
-int main(int argc, char* argv[]) {
+void home();
+
+class Entry {
+    private:
+    std::string entry;
+    std::string username;
+    std::string password;
     
-    char pass_phrase [MAX_PHRASE_LENGTH];
-            
-    CryptoPP::Integer i;
+    //public member functions
+    public:
+    Entry(char e[], char u[], char p[]) { // Constructor for Entry class
+        entry = e;
+        username = u;
+        password = p;
+    }
+};
+
+int main(int argc, char* argv[]) {
+ 
+    char master_pass_phrase [MAX_PHRASE_LENGTH];
        
     if (argc == 1) {
         std::cout << "No database file provided. Creating new password database." << std::endl;
         std::cout << "Please enter a master password to encrypt your password database: ";
-        std::cin.getline(pass_phrase, MAX_PHRASE_LENGTH);
+        std::cin.getline(master_pass_phrase, MAX_PHRASE_LENGTH);
+        home();
     }
     else if (argc == 2) {
         std::cout << "Database file found. Please enter your password: ";
-        std::cin.getline(pass_phrase, MAX_PHRASE_LENGTH);
+        std::cin.getline(master_pass_phrase, MAX_PHRASE_LENGTH);
+        home();
     }
     else {
         std::cout << "Incorrect usage. Aborting" << std::endl;
         exit(1);
     }
- 
-} 
+}
+
+void home() {
+
+    while (true) {
+        std::cout << "Welcome to the best password manager in the world!" << std::endl;
+        std::cout << "What would you like to do?" << std::endl;
+        std::cout << "1) Create new entry" << std::endl;
+        std::cout << "2) Retrieve password" << std::endl;
+        std::cout << "3) Print all entries" << std::endl;
+        std::cout << "4) Save changes and exit" << std::endl;
+        std::cout << "5) Discard changes and exit" << std::endl;
+        
+    }
+}
