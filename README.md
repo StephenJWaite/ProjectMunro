@@ -10,6 +10,11 @@ We dont even know how to use git, life is pain
 ```
 	sudo apt install libcrypto++-dev libcrypto++-doc libcrypto++-utils
 ```
+### Library documentation:
+
+```
+	firefox /usr/share/doc/libcrypto++-doc/html/index.html &
+```
 ### Compile
 
 ```

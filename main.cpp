@@ -5,8 +5,8 @@
 #include <ctime>
 #include <memory>
 
-//#include "cryptopp/default.h"
-//#include "cryptopp/integer.h"
+#include "cryptopp/modes.h" // CFB_Mode
+#include "cryptopp/aes.h" // Advanced Encryption Standard
 
 const int MAX_PHRASE_LENGTH=250;
 
@@ -46,6 +46,26 @@ int main(int argc, char* argv[]) {
         std::cout << "Incorrect usage. Aborting" << std::endl;
         exit(1); // We can't recover from this, so exit. Alternatively: default to create new db
     }
+
+    /*
+    CryptoPP::CFB_Mode -> Class Template
+    Cipher Feedback mode of operation.
+    A block cipher by itself is only suitable for the secure cryptographic
+    transformation (encryption or decryption) of one fixed-length group of
+    bits called a block.[2] A mode of operation describes how to repeatedly
+    apply a cipher's single-block operation to securely transform amounts
+    of data larger than a block.
+
+    CryptoPP::AES -> This is our block cipher. It encrypts/decrypts 16 bytes
+    or 128 bits at a time.
+
+    The angle brackets mean CFB_Mode takes AES as a template parameter
+
+    "Encryption" is one of two members of enumerator CipherDir: "Decryption
+    is the other".
+    */
+    CryptoPP::CFB_Mode<CryptoPP::AES>::Encryption encryptor;
+    //std::cout << encryptor << std::endl;
 }
 
 void home() {
@@ -70,7 +90,7 @@ void home() {
             std::cout << "Please enter an integer:" << std::endl;
             std::cin.clear(); // Clears the error flag, NOT the stream
             std::cin.ignore(256,'\n'); // abc\n is in the stream, move forward 256 chars or until we reach \n:   .abc\n -> a.bc\n  -> ab.c\n -> abc.\n
-            std::cin >> user_choice; // cin knows to ignore when parsing to an integer 
+            std::cin >> user_choice; // cin knows to ignore \n when parsing to an integer
         }
 
         switch(user_choice) {
@@ -94,10 +114,6 @@ void home() {
                 std::cout << "Now do something" << std::endl;
                 return;
             }
-        }
-        
-        
+        }   
     }
 }
-
-// 
