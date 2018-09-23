@@ -1,12 +1,8 @@
 #include <iostream>
-#include <cstring>
-#include <cstdlib>
-#include <cstdio>
-#include <ctime>
-#include <memory>
 
 #include "cryptopp/modes.h" // CFB_Mode
 #include "cryptopp/aes.h" // Advanced Encryption Standard
+#include "cryptopp/osrng.h" // Random number generator
 
 const int MAX_PHRASE_LENGTH=250;
 
@@ -20,7 +16,7 @@ class Entry {
     
     //public member functions
     public:
-    Entry(char e[], char u[], char p[]) { // Constructor for Entry class
+    Entry(const char e[],const char u[],const char p[]) { // Constructor for Entry class
         name = e;
         username = u;
         password = p;
@@ -29,11 +25,16 @@ class Entry {
 
 int main(int argc, char* argv[]) {
  
+    // Allocate 250 bytes on the stack (std::string would go on the heap,
+    // and would be slower to access. Since our "string" doesn't need to
+    // change in any way, char (c-string) is the better option
     char master_pass_phrase [MAX_PHRASE_LENGTH];
        
     if (argc == 1) {
         std::cout << "No database file provided. Creating new password database." << std::endl;
         std::cout << "Please enter a master password to encrypt your password database: ";
+        // cin.getline reads input from the stream into a c-string.
+        // It reads MAX_PHRASE_LENGTH characters from the input steam or until it hits \n
         std::cin.getline(master_pass_phrase, MAX_PHRASE_LENGTH);
         home();
     }
@@ -47,6 +48,34 @@ int main(int argc, char* argv[]) {
         exit(1); // We can't recover from this, so exit. Alternatively: default to create new db
     }
 
+
+    // Initialise the object to generate random data
+    CryptoPP::AutoSeededRandomPool rnd;
+
+    // The "Initialisation Vector" is used as a parameter
+    // during encryption, it acts like a "salt" for passwords, i.e.
+    // it ensures the ciphertext created when encrypting a file is
+    // different every time, even if the file contents doesn't change.
+    // This means we need to store the IV for later decryption
+    // The IV and the key both need to be 16 bytes, specified by the
+    // CryptoPP::AES::BLOCKSIZE, which is just an int = 16.
+    // CryptoPP::SecByteBlock... creates a secure block of byte data
+    // called "iv" which is 16 bytes long. A single memory address
+    // holds one byte.
+    CryptoPP::SecByteBlock iv(CryptoPP::AES::BLOCKSIZE);
+    rnd.GenerateBlock(iv, iv.size());
+
+    // The keylength must also be 16 bytes
+    CryptoPP::SecByteBlock key(CryptoPP::AES::DEFAULT_KEYLENGTH);
+    rnd.GenerateBlock(key, key.size());
+
+    // byte = unsigned char = 8 bit, stack allocated data
+    // yes this is retarded, in Rust this is type [u8].
+    // 8 bits unsigned is the ranged 0 to 127
+    const unsigned char plain_text[] = "Hellö! How are you."; // one char = one byte only applies to ASCII. Try ö
+    size_t message_len = std::strlen((char*)plain_text) + 1;
+
+    std::cout << "The plain text is " << message_len << "bytes long" << std::endl;
     /*
     CryptoPP::CFB_Mode -> Class Template
     Cipher Feedback mode of operation.
@@ -65,7 +94,7 @@ int main(int argc, char* argv[]) {
     is the other".
     */
     CryptoPP::CFB_Mode<CryptoPP::AES>::Encryption encryptor;
-    //std::cout << encryptor << std::endl;
+    
 }
 
 void home() {
@@ -93,6 +122,7 @@ void home() {
             std::cin >> user_choice; // cin knows to ignore \n when parsing to an integer
         }
 
+        // This is syntax sugar for if...elseif...elseif.
         switch(user_choice) {
             case 1: {
                 std::cout << "Now do something" << std::endl;
