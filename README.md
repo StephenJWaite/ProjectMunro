@@ -1,7 +1,4 @@
 # ProjectMunro
-Its a munro style project
-
-We dont even know how to use git, life is pain
 
 ## Setup
 
@@ -11,10 +8,15 @@ We dont even know how to use git, life is pain
 	sudo apt install libcrypto++-dev libcrypto++-doc libcrypto++-utils
 ```
 Header files are installed to /usr/include/crypto++/
+
 The .so and .a files are installed to /usr/lib/x86_64-linux-gnu/
+
 The .a (archive) file is a "static" library
+
 .so (shared object) files are shared objects or dynamic libraries, similar to DLL on Windows.
+
 Static libraries are compiled into the binary.
+
 Dynamic libraries are accessed at runtime.
 
 ### Library documentation:
