@@ -93,7 +93,7 @@ Get ligatures:
 ```
 	sudo apt install fonts-firacode
 ```
-Hit
+In VS Code, hit
 ```
 	ctrl+,
 ```
