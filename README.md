@@ -10,6 +10,13 @@ We dont even know how to use git, life is pain
 ```
 	sudo apt install libcrypto++-dev libcrypto++-doc libcrypto++-utils
 ```
+Header files are installed to /usr/include/crypto++/
+The .so and .a files are installed to /usr/lib/x86_64-linux-gnu/
+The .a (archive) file is a "static" library
+.so (shared object) files are shared objects or dynamic libraries, similar to DLL on Windows.
+Static libraries are compiled into the binary.
+Dynamic libraries are accessed at runtime.
+
 ### Library documentation:
 
 ```
@@ -77,3 +84,47 @@ home screen functionality, as well as to define the Entry class.
 For now we can hard code the input data for encryption decryption for faster iterating.
 Then we need to figure out how to interface with the cryptopp library regarding file
 encryption/decryption.
+
+### VS Code Setup
+
+Get ligatures:
+```
+	sudo apt install fonts-firacode
+```
+Hit
+```
+	ctrl+,
+```
+to open settings. Search for "font", and then replace the contents of "font family"
+with
+```
+	'Fira Code'
+```
+and check the box to use ligatures.
+
+#### Command palette
+To open the command palette, hit:
+```
+	ctrl+shift+p
+```
+
+You can change the theme, git commit/push etc. and many other things
+with the palette.
+
+#### Opening workspace from terminal
+Navigate to ProjectMunro and then use:
+```
+	code .
+```
+This keeps everything together including config files, rather than opening
+files individually.
+
+#### Debugging
+On Linux, typically the GNU GDB debugger is used.
+To work properly, we need to pass g++ the -g flag.
+Then breakpoints can be set in VS Code and we can hit F5
+to debug.
+
+On first attempt, change the JSON to point to the binary
+compiled with -g, e.g. "${workspaceFolder}/a.out"
+or "${workspaceFolder}/run"
