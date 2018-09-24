@@ -1,19 +1,13 @@
-#include <iostream>
+#include "main.h"
 
-#include "cryptopp/modes.h" // CFB_Mode
-#include "cryptopp/aes.h" // Advanced Encryption Standard
-//      https://cryptopp.com/wiki/Advanced_Encryption_Standard
-#include "cryptopp/osrng.h" // Random number generator
+//void print_byte_array_as_decimal(const byte* str);
+//void print_home_screen();
 
-const int MAX_PHRASE_LENGTH=250;
-
-void home();
-void encrypt(const CryptoPP::SecByteBlock& iv,
-             const CryptoPP::SecByteBlock& key,
-             unsigned char* plain_text,
-             const int& message_len);
-void print_byte_array_as_decimal(const byte* str);
-
+// TIL: There is literally only one difference between a class and a struct:
+// Classes: every member and method is default private
+// Struct: every member and method is default public
+// In practice, most people use struct to represent P.O.D.,
+// and class where we want to write methods.
 class Entry {
     private:
     // The encryption functions deal with blocks of memory (addresses) at a time.
@@ -24,27 +18,33 @@ class Entry {
     // 8 bits can hold 2^8 possible values. The type char ranges from -128 to 127
     // in value. The type unsigned char ranges from 0 to 255 in value.
     
-    // byte is inside cryptopp/config.h, and is in the global namespace, not CryptoPP
+    // byte (type) is inside cryptopp/config.h, and is in the global namespace, not CryptoPP
     const byte* name;
     const byte* username;
     const byte* password;
+
     
-    //public member functions
     public:
+
+    // Here, static means that MAX_USERNAME_LENGTH is not a member
+    // of any specific instance of Entry, like name etc. Instead,
+    // it is shared across all instances, and can be accessed
+    // like this: Entry::MAX_USERNAME_LENGTH, or from an individual
+    // class instance (object) -> entry.MAX_USERNAME_LENGTH
+    static const short int MAX_USERNAME_LENGTH = 30;
+
     // Entry(const char* e, const char* u, const char* p) { // Constructor for Entry class
     //     name = e;
     //     username = u;
     //     password = p;
     // }
 
-    // Using initialisation lists, we can make make our object's
-    // attributes "const".
+    // Using initialisation lists, we can make make our object's attributes "const".
     Entry(const byte* e, const byte* u, const byte* p)
         : name(e), username(u), password(p) {} // Constructor
     
     // Destructor
-    // We need to delete any raw pointers (*) to free
-    // memory
+    // We need to delete any raw pointers (*) to free memory
     ~Entry() {
         delete name;
         delete username;
@@ -65,12 +65,11 @@ int main(int argc, char* argv[]) {
         // cin.getline reads input from the stream into a c-string.
         // It reads MAX_PHRASE_LENGTH characters from the input steam or until it hits \n
         std::cin.getline(master_pass_phrase, MAX_PHRASE_LENGTH);
-        home();
     }
     else if (argc == 2) {
         std::cout << "Database file found. Please enter your password: ";
         std::cin.getline(master_pass_phrase, MAX_PHRASE_LENGTH);
-        home();
+        
     }
     else {
         std::cout << "Incorrect usage. Aborting" << std::endl;
@@ -100,7 +99,7 @@ int main(int argc, char* argv[]) {
     // byte = unsigned char = 8 bit, stack allocated data
     // yes this is retarded, in Rust this is type [u8].
     // 8 bits unsigned is the ranged 0 to 127
-    const byte plain_text[] = "Hello! How are you."; // one char = one byte only applies to ASCII. Try ö
+    const byte plain_text[] = "Hello, how are you?"; // one char = one byte only applies to ASCII. Try ö
 
     // Add 1 because strlen ignores null terminator \0
     size_t message_len = std::strlen((char*)plain_text) + 1; // size_t is simply a typedef for unsigned long = unsigned int
@@ -110,24 +109,11 @@ int main(int argc, char* argv[]) {
     print_byte_array_as_decimal(plain_text);
     byte cipher_text[message_len];
 
-    
-}
-
-void home() {
-
     while (true) {
-        std::cout << "--------------------------------------------------" << std::endl;
-        std::cout << "Welcome to the best password manager in the world!" << std::endl;
-        std::cout << "What would you like to do?" << std::endl;
-        std::cout << "1) Create new entry" << std::endl;
-        std::cout << "2) Retrieve password" << std::endl;
-        std::cout << "3) Print all entries" << std::endl;
-        std::cout << "4) Save changes and exit" << std::endl;
-        std::cout << "5) Discard changes and exit" << std::endl;
-        std::cout << "--------------------------------------------------" << std::endl;
         
+        print_home_screen();
         // Get user input, making sure they entered an integer
-        int user_choice;
+        unsigned short user_choice; // int is overkill.
         
         std::cin >> user_choice; // 5\n is in the stream, cin parses 5 into user choice
                 
@@ -139,38 +125,39 @@ void home() {
         }
 
         // This is syntax sugar for if...elseif...elseif.
-    switch(user_choice) {
-        case 1: {
-            std::cout << "Now do something" << std::endl;
-            return;
-        }
-        case 2: {
-            std::cout << "Now do something" << std::endl;
-            return;
-        }
-        case 3: {
-            std::cout << "Now do something" << std::endl;
-            return;
-        }
-        case 4: {
-            //encrypt();
-            return;
-        }
-        case 5: {
-            std::cout << "Now do something" << std::endl;
-            return;
-        }
-    }   
-       
+        switch(user_choice) {
+            case 1: {
+                std::cout << "Now do something" << std::endl;
+                return 0;
+            }
+            case 2: {
+                std::cout << "Now do something" << std::endl;
+                return 0;
+            }
+            case 3: {
+                std::cout << "Now do something" << std::endl;
+                return 0;
+            }
+            case 4: {
+                encrypt(iv, key, plain_text, message_len);
+                return 0;
+            }
+            case 5: {
+                std::cout << "Call decrypt for testing" << std::endl;
+                //decrypt(iv, key, cipher_text, )
+            }
+        }   
     }
 }
 
 void encrypt(const CryptoPP::SecByteBlock& iv,
              const CryptoPP::SecByteBlock& key,
-             unsigned char* plain_text,
-             const int& message_len) {
+             const byte* plain_text,
+             const int& message_len // The "message" is our entire file
+             ) {
 
-    
+    byte ciphertext[2*message_len];
+    byte decrypted_ciphertext[message_len];
     /*
     CryptoPP::CFB_Mode -> Class Template
     Cipher Feedback mode of operation.
@@ -188,16 +175,40 @@ void encrypt(const CryptoPP::SecByteBlock& iv,
     "Encryption" is one of two members of enumerator CipherDir: "Decryption"
     is the other.
     */
+    std::cout << "\nThe original data with length " << strlen((char*)plain_text) << " in UTF-8:" << std::endl;
+    std::cout << plain_text << std::endl;
+    std::cout << "\nThe original data in bytes:" << std::endl;
+    print_byte_array_as_decimal(plain_text);
 
     CryptoPP::CFB_Mode<CryptoPP::AES>::Encryption encryptor(key, key.size(), iv);
-    encryptor.ProcessData(plain_text, plain_text, message_len);
+    encryptor.ProcessData(ciphertext, plain_text, message_len);
+
+    std::cout << "\nThe encrypted data in UTF-8:" << std::endl;
+    std::cout << ciphertext << std::endl;
+
+    std::cout << "\nThe encrypted data with length " << strlen((char*)ciphertext) << " in bytes:" << std::endl;
+    print_byte_array_as_decimal(ciphertext);
+
+    CryptoPP::CFB_Mode<CryptoPP::AES>::Decryption decryptor(key, key.size(), iv);
+    decryptor.ProcessData(decrypted_ciphertext, ciphertext, message_len);
+
+    std::cout << "\nThe decrypted data in bytes:" << std::endl;
+    print_byte_array_as_decimal(decrypted_ciphertext);
+    
+    std::cout << "\nThe decrypted data in UTF-8:" << std::endl;
+    std::cout << decrypted_ciphertext << std::endl;
 }
 
-void print_byte_array_as_decimal(const byte* str) {
-    const int length = strlen((char*)str);
-    std::cout << "[  ";
-    for (int i = 0; i < length; i++) {
-        std::cout << (int)str[i] << "  ";
-    }
-    std::cout << "]" << std::endl;
+void decrypt(const CryptoPP::SecByteBlock& iv,
+             const CryptoPP::SecByteBlock& key,
+             const byte* ciphertext,
+             byte* decrypted_ciphertext,
+             const int& message_len // The "message" is our entire file
+             ) {
+
+    
+
+    CryptoPP::CFB_Mode<CryptoPP::AES>::Decryption decryptor(key, key.size(), iv);
+    decryptor.ProcessData(decrypted_ciphertext, ciphertext, message_len);
 }
+
