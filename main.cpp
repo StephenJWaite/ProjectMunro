@@ -1,8 +1,5 @@
 #include "main.h"
 
-//void print_byte_array_as_decimal(const byte* str);
-//void print_home_screen();
-
 // TIL: There is literally only one difference between a class and a struct:
 // Classes: every member and method is default private
 // Struct: every member and method is default public
@@ -19,6 +16,7 @@ class Entry {
     // in value. The type unsigned char ranges from 0 to 255 in value.
     
     // byte (type) is inside cryptopp/config.h, and is in the global namespace, not CryptoPP
+    // "byte" is short for "unsigned char", as "size_t" is short for "unsigned int"
     const byte* name;
     const byte* username;
     const byte* password;
@@ -39,7 +37,7 @@ class Entry {
     //     password = p;
     // }
 
-    // Using initialisation lists, we can make make our object's attributes "const".
+    // Using an initialisation list, we can make make our object's attributes "const".
     Entry(const byte* e, const byte* u, const byte* p)
         : name(e), username(u), password(p) {} // Constructor
     
@@ -163,7 +161,7 @@ void encrypt(const CryptoPP::SecByteBlock& iv,
     Cipher Feedback mode of operation.
     A block cipher by itself is only suitable for the secure cryptographic
     transformation (encryption or decryption) of one fixed-length group of
-    bits called a block.[2] A mode of operation describes how to repeatedly
+    bits called a block. A mode of operation describes how to repeatedly
     apply a cipher's single-block operation to securely transform amounts
     of data larger than a block.
 
@@ -177,6 +175,7 @@ void encrypt(const CryptoPP::SecByteBlock& iv,
     */
     std::cout << "\nThe original data with length " << strlen((char*)plain_text) << " in UTF-8:" << std::endl;
     std::cout << plain_text << std::endl;
+    
     std::cout << "\nThe original data in bytes:" << std::endl;
     print_byte_array_as_decimal(plain_text);
 
