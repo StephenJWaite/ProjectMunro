@@ -1,3 +1,6 @@
+#ifndef MAIN_H // prevents double inclusion
+#define MAIN_H // these are called "fileguards"
+
 #include <iostream>
 #include "cryptopp/modes.h" // CFB_Mode
 #include "cryptopp/aes.h" // Advanced Encryption Standard
@@ -43,3 +46,7 @@ void print_home_screen() {
         std::cout << "--------------------------------------------------" << std::endl;
         std::cout << std::endl;
 }
+
+
+
+#endif
