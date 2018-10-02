@@ -6,7 +6,7 @@ run: main.o
 
 # when main.cpp changes, run the following command to produce "main.o"
 # -c flag simply compiles into an object file
-main.o: main.cpp
+main.o: main.cpp password_manager.h
 	g++ -c main.cpp
 
 # doesn't produce anything, but we can invoke from terminal
