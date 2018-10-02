@@ -1,4 +1,4 @@
-#include "main.h"
+#include "password_manager.h"
 
 // TIL: There is literally only one difference between a class and a struct:
 // Classes: every member and method is default private
