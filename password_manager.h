@@ -16,7 +16,8 @@ static const int MAX_PHRASE_LENGTH=250;
 void encrypt(const CryptoPP::SecByteBlock& iv,
              const CryptoPP::SecByteBlock& key,
              const byte* plain_text,
-             const int& message_len);
+             const int& message_len,
+             byte* encrypted_data);
 void decrypt(const CryptoPP::SecByteBlock& iv,
              const CryptoPP::SecByteBlock& key,
              const byte* ciphertext,

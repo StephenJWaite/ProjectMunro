@@ -97,11 +97,12 @@ int main(int argc, char* argv[]) {
     // byte = unsigned char = 8 bit, stack allocated data
     // yes this is retarded, in Rust this is type [u8].
     // 8 bits unsigned is the ranged 0 to 127
-    const byte plain_text[] = "Hello, how are you?"; // one char = one byte only applies to ASCII. Try ö
+    const byte plain_text[] = "Facebook,a.n_munro@outlook.com,my_password\n"; // one char = one byte only applies to ASCII. Try ö
 
     // Add 1 because strlen ignores null terminator \0
     size_t message_len = std::strlen((char*)plain_text) + 1; // size_t is simply a typedef for unsigned long = unsigned int
-    size_t msg_len2 = sizeof(plain_text); // This is the same as above
+    byte encrypted_data[2*message_len];
+
     std::cout << "The plain text is " << message_len << " bytes long" << std::endl;
     std::cout << "Plain text in bytes: " << std::endl;
     print_byte_array_as_decimal(plain_text);
@@ -137,7 +138,7 @@ int main(int argc, char* argv[]) {
                 return 0;
             }
             case 4: {
-                encrypt(iv, key, plain_text, message_len);
+                encrypt(iv, key, plain_text, message_len, encrypted_data);
                 return 0;
             }
             case 5: {
@@ -151,7 +152,8 @@ int main(int argc, char* argv[]) {
 void encrypt(const CryptoPP::SecByteBlock& iv,
              const CryptoPP::SecByteBlock& key,
              const byte* plain_text,
-             const int& message_len // The "message" is our entire file
+             const int& message_len, // The "message" is our entire file
+             byte* encrypted_data
              ) {
 
     byte ciphertext[2*message_len];
