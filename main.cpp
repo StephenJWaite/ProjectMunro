@@ -173,29 +173,10 @@ void encrypt(const CryptoPP::SecByteBlock& iv,
     "Encryption" is one of two members of enumerator CipherDir: "Decryption"
     is the other.
     */
-    std::cout << "\nThe original data with length " << strlen((char*)plain_text) << " in UTF-8:" << std::endl;
-    std::cout << plain_text << std::endl;
     
-    std::cout << "\nThe original data in bytes:" << std::endl;
-    print_byte_array_as_decimal(plain_text);
-
     CryptoPP::CFB_Mode<CryptoPP::AES>::Encryption encryptor(key, key.size(), iv);
     encryptor.ProcessData(ciphertext, plain_text, message_len);
 
-    std::cout << "\nThe encrypted data in UTF-8:" << std::endl;
-    std::cout << ciphertext << std::endl;
-
-    std::cout << "\nThe encrypted data with length " << strlen((char*)ciphertext) << " in bytes:" << std::endl;
-    print_byte_array_as_decimal(ciphertext);
-
-    CryptoPP::CFB_Mode<CryptoPP::AES>::Decryption decryptor(key, key.size(), iv);
-    decryptor.ProcessData(decrypted_ciphertext, ciphertext, message_len);
-
-    std::cout << "\nThe decrypted data in bytes:" << std::endl;
-    print_byte_array_as_decimal(decrypted_ciphertext);
-    
-    std::cout << "\nThe decrypted data in UTF-8:" << std::endl;
-    std::cout << decrypted_ciphertext << std::endl;
 }
 
 void decrypt(const CryptoPP::SecByteBlock& iv,
